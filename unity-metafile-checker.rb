@@ -3,17 +3,17 @@
 class UnityMetafileChecker < Formula
     desc "Check missing unity meta files"
     homepage "https://github.com/neptaco/unity-metafile-checker"
-    version "0.1.0"
+    version "0.1.1"
     license "MIT"
   
     bottle :unneeded
   
     if OS.mac?
       url "https://github.com/neptaco/unity-metafile-checker/releases/download/#{version}/unity-metafile-checker-macos-#{version}.tar.gz"
-      sha256 "2e7c55e9588602e4141805766a3ccced9e67b86049fb8bc0e3c723634990f9b1"
+      sha256 "d6ded770d0f84cdf5d16d24a09ba2fe1fe41c1ae9c58f61132b5c25b9a5678f9"
     elsif OS.linux?
       url "https://github.com/neptaco/unity-metafile-checker/releases/download/#{version}/unity-metafile-checker-linux-#{version}.tar.gz"
-      sha256 "bce2a68b0d849b2f2e7736d6fec98b25e0a87153786c18eeba5227685c95a75e"
+      sha256 "d1c159f58c87b686edf0d2ad1e0469fdfc61ba4709eca681a13b36855c15fdf9"
     end
   
     def install
