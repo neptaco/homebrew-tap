@@ -3,7 +3,7 @@
 class UnityMetafileChecker < Formula
     desc "Check missing unity meta files"
     homepage "https://github.com/neptaco/unity-metafile-checker"
-    version "v0.1.0"
+    version "0.1.0"
     license "MIT"
   
     bottle :unneeded
