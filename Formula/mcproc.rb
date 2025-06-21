@@ -6,8 +6,6 @@ class Mcproc < Formula
   version "0.1.0"
   license "MIT"
 
-  bottle :unneeded
-
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/neptaco/mcproc/releases/download/v#{version}/mcproc-v#{version}-aarch64-apple-darwin.tar.gz"
