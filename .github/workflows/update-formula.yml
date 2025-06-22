@@ -94,33 +94,34 @@ jobs:
           # Update SHA256 hashes
           echo "Updating SHA256 hashes..."
           
-          # macOS ARM64
-          echo "Updating macOS ARM64 SHA256: $SHA_MACOS_ARM64"
-          awk -v sha="$SHA_MACOS_ARM64" '{gsub(/sha256 arm64_apple: "[^"]*"/, "sha256 arm64_apple: \"" sha "\""); print}' "$FORMULA_FILE" > "${FORMULA_FILE}.tmp" && mv "${FORMULA_FILE}.tmp" "$FORMULA_FILE" || {
-            echo "Error: Failed to update macOS ARM64 SHA256"
-            exit 1
-          }
+          # Create a temporary file for the updated formula
+          TMP_FILE=$(mktemp)
           
-          # macOS x86_64
-          echo "Updating macOS x86_64 SHA256: $SHA_MACOS_X64"
-          awk -v sha="$SHA_MACOS_X64" '{gsub(/sha256 x86_64_apple: "[^"]*"/, "sha256 x86_64_apple: \"" sha "\""); print}' "$FORMULA_FILE" > "${FORMULA_FILE}.tmp" && mv "${FORMULA_FILE}.tmp" "$FORMULA_FILE" || {
-            echo "Error: Failed to update macOS x86_64 SHA256"
-            exit 1
-          }
+          # Process the formula file line by line
+          while IFS= read -r line; do
+            # Update version
+            if [[ "$line" =~ ^[[:space:]]*version[[:space:]]+\".*\" ]]; then
+              echo "  version \"${VERSION_NUM}\"" >> "$TMP_FILE"
+            # Update SHA256 for macOS ARM64
+            elif [[ "$prev_line" =~ aarch64-apple-darwin ]] && [[ "$line" =~ ^[[:space:]]*sha256[[:space:]]+\".*\" ]]; then
+              echo "      sha256 \"${SHA_MACOS_ARM64}\"" >> "$TMP_FILE"
+            # Update SHA256 for macOS x86_64
+            elif [[ "$prev_line" =~ x86_64-apple-darwin ]] && [[ "$line" =~ ^[[:space:]]*sha256[[:space:]]+\".*\" ]]; then
+              echo "      sha256 \"${SHA_MACOS_X64}\"" >> "$TMP_FILE"
+            # Update SHA256 for Linux ARM64
+            elif [[ "$prev_line" =~ aarch64-unknown-linux-gnu ]] && [[ "$line" =~ ^[[:space:]]*sha256[[:space:]]+\".*\" ]]; then
+              echo "      sha256 \"${SHA_LINUX_ARM64}\"" >> "$TMP_FILE"
+            # Update SHA256 for Linux x86_64
+            elif [[ "$prev_line" =~ x86_64-unknown-linux-gnu ]] && [[ "$line" =~ ^[[:space:]]*sha256[[:space:]]+\".*\" ]]; then
+              echo "      sha256 \"${SHA_LINUX_X64}\"" >> "$TMP_FILE"
+            else
+              echo "$line" >> "$TMP_FILE"
+            fi
+            prev_line="$line"
+          done < "$FORMULA_FILE"
           
-          # Linux ARM64
-          echo "Updating Linux ARM64 SHA256: $SHA_LINUX_ARM64"
-          awk -v sha="$SHA_LINUX_ARM64" '{gsub(/sha256 arm64_linux: "[^"]*"/, "sha256 arm64_linux: \"" sha "\""); print}' "$FORMULA_FILE" > "${FORMULA_FILE}.tmp" && mv "${FORMULA_FILE}.tmp" "$FORMULA_FILE" || {
-            echo "Error: Failed to update Linux ARM64 SHA256"
-            exit 1
-          }
-          
-          # Linux x86_64
-          echo "Updating Linux x86_64 SHA256: $SHA_LINUX_X64"
-          awk -v sha="$SHA_LINUX_X64" '{gsub(/sha256 x86_64_linux: "[^"]*"/, "sha256 x86_64_linux: \"" sha "\""); print}' "$FORMULA_FILE" > "${FORMULA_FILE}.tmp" && mv "${FORMULA_FILE}.tmp" "$FORMULA_FILE" || {
-            echo "Error: Failed to update Linux x86_64 SHA256"
-            exit 1
-          }
+          # Replace the original file with the updated one
+          mv "$TMP_FILE" "$FORMULA_FILE"
           
           echo "Formula file updated successfully"
           
