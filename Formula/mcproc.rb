@@ -5,14 +5,14 @@ class Mcproc < Formula
   homepage "https://github.com/neptaco/mcproc"
   url "https://github.com/neptaco/mcproc/releases/download/v#{version}/mcproc-#{version}-aarch64-apple-darwin.tar.gz"
   version "0.1.0"
-  sha256 "4bf2c1475ac03dacb1bdb0566f4b1563f7bd065257ef94e2b9285dab845c359b"
+  sha256 "26cca84eb8b11573aa8f802ef2fece94e703e7aaa2fd86cc206029b2e18dc8e2"
   license "MIT"
 
   bottle do
-    sha256 arm64_apple: "4bf2c1475ac03dacb1bdb0566f4b1563f7bd065257ef94e2b9285dab845c359b"
-    sha256 x86_64_apple: "e8c135f0a313b9d4199ae0d520e2b663ea5c82feecca9a95bec1a1366ebe470e"
-    sha256 arm64_linux: "1901daa7d71990bc2294c009922b2b9ceef3215653c2f7600c5f9935c696e6ee"
-    sha256 x86_64_linux: "5a156e3bd7092e100d24fc8d87c7fb304fb8201df1920c1a95fedf5f865f4454"
+    sha256 arm64_apple: "26cca84eb8b11573aa8f802ef2fece94e703e7aaa2fd86cc206029b2e18dc8e2"
+    sha256 x86_64_apple: "22427309a33aaa2a97c85f3d07dfb57019cb1fc277965fdf0c18b53bd5623e09"
+    sha256 arm64_linux: "42aef4bba9dc07549bbd37e9ba317bf9c70871013fc07bb09f7ddb0bd56c1d45"
+    sha256 x86_64_linux: "c62e37c73ddf4b7afa1ef6db0695d0dc2184eaf0dadb9421a8d43ca5d3c3bf25"
   end
 
   def install
