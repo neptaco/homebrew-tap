@@ -133,29 +133,10 @@ jobs:
           git diff --color=always
 
       - name: Commit and Push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -e
-          
-          # Configure Git with GitHub Actions bot credentials
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          
-          # Set up authentication for HTTPS push
-          git config --local url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
-          
-          FORMULA_NAME=${{ github.event.client_payload.formula || github.event.inputs.formula }}
-          VERSION=${{ github.event.client_payload.version || github.event.inputs.version }}
-          
-          echo "Adding formula file to git..."
-          git add Formula/${FORMULA_NAME}.rb
-          
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            echo "Committing changes..."
-            git commit -m "Update ${FORMULA_NAME} to ${VERSION}"
-            echo "Pushing changes..."
-            git push origin HEAD
-          fi
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update ${{ github.event.client_payload.formula || github.event.inputs.formula }} to ${{ github.event.client_payload.version || github.event.inputs.version }}"
+          file_pattern: "Formula/*.rb"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
