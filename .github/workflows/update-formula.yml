@@ -35,6 +35,14 @@ jobs:
           VERSION: ${{ github.event.client_payload.version || github.event.inputs.version }}
         run: |
           set -e
+          echo "Debug: Raw inputs:"
+          echo "  client_payload.formula: ${{ github.event.client_payload.formula }}"
+          echo "  client_payload.version: ${{ github.event.client_payload.version }}"
+          echo "  inputs.formula: ${{ github.event.inputs.formula }}"
+          echo "  inputs.version: ${{ github.event.inputs.version }}"
+          echo "Environment variables:"
+          echo "  FORMULA_NAME: $FORMULA_NAME"
+          echo "  VERSION: $VERSION"
           echo "Updating formula: $FORMULA_NAME to version: $VERSION"
           
           # Remove 'v' prefix if present
@@ -48,24 +56,40 @@ jobs:
           URL="https://github.com/neptaco/${FORMULA_NAME}/releases/download/${VERSION}/${FORMULA_NAME}-${VERSION_NUM}-aarch64-apple-darwin.tar.gz"
           echo "Fetching SHA256 for macOS ARM64 from: ${URL}.sha256"
           SHA_MACOS_ARM64=$(curl -sL "${URL}.sha256" | awk '{print $1}')
+          if [ -z "$SHA_MACOS_ARM64" ]; then
+            echo "Error: Failed to fetch SHA256 for macOS ARM64"
+            exit 1
+          fi
           echo "SHA_MACOS_ARM64: ${SHA_MACOS_ARM64}"
           
           # macOS x86_64
           URL="https://github.com/neptaco/${FORMULA_NAME}/releases/download/${VERSION}/${FORMULA_NAME}-${VERSION_NUM}-x86_64-apple-darwin.tar.gz"
           echo "Fetching SHA256 for macOS x86_64 from: ${URL}.sha256"
           SHA_MACOS_X64=$(curl -sL "${URL}.sha256" | awk '{print $1}')
+          if [ -z "$SHA_MACOS_X64" ]; then
+            echo "Error: Failed to fetch SHA256 for macOS x86_64"
+            exit 1
+          fi
           echo "SHA_MACOS_X64: ${SHA_MACOS_X64}"
           
           # Linux ARM64
           URL="https://github.com/neptaco/${FORMULA_NAME}/releases/download/${VERSION}/${FORMULA_NAME}-${VERSION_NUM}-aarch64-unknown-linux-gnu.tar.gz"
           echo "Fetching SHA256 for Linux ARM64 from: ${URL}.sha256"
           SHA_LINUX_ARM64=$(curl -sL "${URL}.sha256" | awk '{print $1}')
+          if [ -z "$SHA_LINUX_ARM64" ]; then
+            echo "Error: Failed to fetch SHA256 for Linux ARM64"
+            exit 1
+          fi
           echo "SHA_LINUX_ARM64: ${SHA_LINUX_ARM64}"
           
           # Linux x86_64
           URL="https://github.com/neptaco/${FORMULA_NAME}/releases/download/${VERSION}/${FORMULA_NAME}-${VERSION_NUM}-x86_64-unknown-linux-gnu.tar.gz"
           echo "Fetching SHA256 for Linux x86_64 from: ${URL}.sha256"
           SHA_LINUX_X64=$(curl -sL "${URL}.sha256" | awk '{print $1}')
+          if [ -z "$SHA_LINUX_X64" ]; then
+            echo "Error: Failed to fetch SHA256 for Linux x86_64"
+            exit 1
+          fi
           echo "SHA_LINUX_X64: ${SHA_LINUX_X64}"
           
           # Update the formula file
@@ -87,44 +111,24 @@ jobs:
           cp "$FORMULA_FILE" "${FORMULA_FILE}.backup"
           echo "Created backup: ${FORMULA_FILE}.backup"
           
+          # Update formula using sed commands
+          echo "Updating formula version and SHA256 hashes..."
+          
           # Update version
-          echo "Updating version to: $VERSION_NUM"
-          awk -v version="$VERSION_NUM" '{gsub(/version "[^"]*"/, "version \"" version "\""); print}' "$FORMULA_FILE" > "${FORMULA_FILE}.tmp" && mv "${FORMULA_FILE}.tmp" "$FORMULA_FILE" || {
-            echo "Error: Failed to update version"
-            exit 1
-          }
+          sed -i.bak "s/version \".*\"/version \"${VERSION_NUM}\"/" "$FORMULA_FILE"
           
-          # Update SHA256 hashes
-          echo "Updating SHA256 hashes..."
+          # Update SHA256 hashes - more precise pattern matching
+          # macOS ARM64
+          sed -i.bak '/aarch64-apple-darwin\.tar\.gz/,/sha256/{s/sha256 ".*"/sha256 "'"${SHA_MACOS_ARM64}"'"/;}' "$FORMULA_FILE"
           
-          # Create a temporary file for the updated formula
-          TMP_FILE=$(mktemp)
+          # macOS x86_64
+          sed -i.bak '/x86_64-apple-darwin\.tar\.gz/,/sha256/{s/sha256 ".*"/sha256 "'"${SHA_MACOS_X64}"'"/;}' "$FORMULA_FILE"
           
-          # Process the formula file line by line
-          while IFS= read -r line; do
-            # Update version
-            if [[ "$line" =~ ^[[:space:]]*version[[:space:]]+\".*\" ]]; then
-              echo "  version \"${VERSION_NUM}\"" >> "$TMP_FILE"
-            # Update SHA256 for macOS ARM64
-            elif [[ "$prev_line" =~ aarch64-apple-darwin ]] && [[ "$line" =~ ^[[:space:]]*sha256[[:space:]]+\".*\" ]]; then
-              echo "      sha256 \"${SHA_MACOS_ARM64}\"" >> "$TMP_FILE"
-            # Update SHA256 for macOS x86_64
-            elif [[ "$prev_line" =~ x86_64-apple-darwin ]] && [[ "$line" =~ ^[[:space:]]*sha256[[:space:]]+\".*\" ]]; then
-              echo "      sha256 \"${SHA_MACOS_X64}\"" >> "$TMP_FILE"
-            # Update SHA256 for Linux ARM64
-            elif [[ "$prev_line" =~ aarch64-unknown-linux-gnu ]] && [[ "$line" =~ ^[[:space:]]*sha256[[:space:]]+\".*\" ]]; then
-              echo "      sha256 \"${SHA_LINUX_ARM64}\"" >> "$TMP_FILE"
-            # Update SHA256 for Linux x86_64
-            elif [[ "$prev_line" =~ x86_64-unknown-linux-gnu ]] && [[ "$line" =~ ^[[:space:]]*sha256[[:space:]]+\".*\" ]]; then
-              echo "      sha256 \"${SHA_LINUX_X64}\"" >> "$TMP_FILE"
-            else
-              echo "$line" >> "$TMP_FILE"
-            fi
-            prev_line="$line"
-          done < "$FORMULA_FILE"
+          # Linux ARM64
+          sed -i.bak '/aarch64-unknown-linux-gnu\.tar\.gz/,/sha256/{s/sha256 ".*"/sha256 "'"${SHA_LINUX_ARM64}"'"/;}' "$FORMULA_FILE"
           
-          # Replace the original file with the updated one
-          mv "$TMP_FILE" "$FORMULA_FILE"
+          # Linux x86_64
+          sed -i.bak '/x86_64-unknown-linux-gnu\.tar\.gz/,/sha256/{s/sha256 ".*"/sha256 "'"${SHA_LINUX_X64}"'"/;}' "$FORMULA_FILE"
           
           echo "Formula file updated successfully"
           
