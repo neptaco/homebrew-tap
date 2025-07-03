@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@master
@@ -130,20 +132,25 @@ jobs:
           git diff --color=always
 
       - name: Commit and Push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
           
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
           FORMULA_NAME=${{ github.event.client_payload.formula || github.event.inputs.formula }}
           VERSION=${{ github.event.client_payload.version || github.event.inputs.version }}
           
+          echo "Adding formula file to git..."
           git add Formula/${FORMULA_NAME}.rb
           
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
+            echo "Committing changes..."
             git commit -m "Update ${FORMULA_NAME} to ${VERSION}"
-            git push
+            echo "Pushing changes..."
+            git push origin HEAD:${{ github.ref_name }}
           fi
