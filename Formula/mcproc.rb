@@ -3,24 +3,24 @@
 class Mcproc < Formula
   desc "Model Context Protocol server for AI agent process management"
   homepage "https://github.com/neptaco/mcproc"
-  version "0.1.1"
+  version "0.1.2"
   license "MIT"
 
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/neptaco/mcproc/releases/download/v#{version}/mcproc-#{version}-aarch64-apple-darwin.tar.gz"
-      sha256 "d3efb406a8205bde9b767dbb5c2b79a640d2deec3f4413bee129d4d8cc34cf27"
+      sha256 "50de877ecb086125ac8e18d66b6406b44a0d8d4f9fd9cf6917f0baab5862245c"
     else
       url "https://github.com/neptaco/mcproc/releases/download/v#{version}/mcproc-#{version}-x86_64-apple-darwin.tar.gz"
-      sha256 "03c941f981852c75436d66c0c3c62b3190e713739a517ab086b23df3473ef1d6"
+      sha256 "d59a234df3e53e6de113f6c3998ed02e85047dbb7f845bd9103a79b20b9ffdc1"
     end
   elsif OS.linux?
     if Hardware::CPU.arm?
       url "https://github.com/neptaco/mcproc/releases/download/v#{version}/mcproc-#{version}-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "2798c149a00d1577932bede3949e889aa53d3b439194a70003440f1bf1ac47a6"
+      sha256 "3b6cddd4e8cd25df9bcaaf5cd0677397ce1e06533b835f7a91d8eaebba677f29"
     else
       url "https://github.com/neptaco/mcproc/releases/download/v#{version}/mcproc-#{version}-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "58ca86c97f7b06517d0a60bc91803d39f0b9e0acfcfdc9a52f5107e4dd0eb75c"
+      sha256 "056201accd9b4e75b8e80f321a7eb41582c5e7f392b682a5a049031eefcc66b5"
     end
   end
 
