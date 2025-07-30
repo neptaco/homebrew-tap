@@ -9,18 +9,18 @@ class Mcproc < Formula
   if OS.mac?
     if Hardware::CPU.arm?
       url "https://github.com/neptaco/mcproc/releases/download/v#{version}/mcproc-#{version}-aarch64-apple-darwin.tar.gz"
-      sha256 "50de877ecb086125ac8e18d66b6406b44a0d8d4f9fd9cf6917f0baab5862245c"
+      sha256 "2455db2171a9cf5af87c68ffb1fe2321ca0a66e7797e5f78fd1ecc2f5e8da679"
     else
       url "https://github.com/neptaco/mcproc/releases/download/v#{version}/mcproc-#{version}-x86_64-apple-darwin.tar.gz"
-      sha256 "d59a234df3e53e6de113f6c3998ed02e85047dbb7f845bd9103a79b20b9ffdc1"
+      sha256 "c89edc3fff1c8ff1e5e479e187ac83e4f6c479886c4cb419bc3589a559394e03"
     end
   elsif OS.linux?
     if Hardware::CPU.arm?
       url "https://github.com/neptaco/mcproc/releases/download/v#{version}/mcproc-#{version}-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "3b6cddd4e8cd25df9bcaaf5cd0677397ce1e06533b835f7a91d8eaebba677f29"
+      sha256 "f01d3d83b5c31369e1ad57c5fd2b11ee008c6e0aa52c91c3980e9d0b31a089d5"
     else
       url "https://github.com/neptaco/mcproc/releases/download/v#{version}/mcproc-#{version}-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "056201accd9b4e75b8e80f321a7eb41582c5e7f392b682a5a049031eefcc66b5"
+      sha256 "09e9f2ffa8f219f2d5850e21dd0c4aa32025857b2a3432c74a86bea9aa75b197"
     end
   end
 
