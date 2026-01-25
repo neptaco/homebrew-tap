@@ -5,21 +5,21 @@
 class Uniforge < Formula
   desc "CLI tool for Unity development"
   homepage "https://github.com/neptaco/uniforge"
-  version "0.3.0"
+  version "0.4.0"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/neptaco/UniForge/releases/download/v0.3.0/UniForge_darwin_amd64.tar.gz"
-      sha256 "2092547b6f5e7f83ad42bc1b9f459b10542330c8de38f0884bd8e6ce916091b6"
+      url "https://github.com/neptaco/UniForge/releases/download/v0.4.0/UniForge_darwin_amd64.tar.gz"
+      sha256 "11cd649dba7fbe3319fac11a0164c52a0cb737aa2dd44e0e0760247b6253def0"
 
       def install
         bin.install "uniforge"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/neptaco/UniForge/releases/download/v0.3.0/UniForge_darwin_arm64.tar.gz"
-      sha256 "30fe740d72d9556e074159ef138eacf62f38edc49fd8c1b4b5f1f274851ef964"
+      url "https://github.com/neptaco/UniForge/releases/download/v0.4.0/UniForge_darwin_arm64.tar.gz"
+      sha256 "2a4835982f356c8c64bc1aa6146e992fe0c120fd60eb8a7ca5163ccfd4226801"
 
       def install
         bin.install "uniforge"
@@ -29,15 +29,15 @@ class Uniforge < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/neptaco/UniForge/releases/download/v0.3.0/UniForge_linux_amd64.tar.gz"
-      sha256 "8ad97b4d6daea5352ee4ec1aaaeb97082a837cdd3bea368bfa7877d07a262f8b"
+      url "https://github.com/neptaco/UniForge/releases/download/v0.4.0/UniForge_linux_amd64.tar.gz"
+      sha256 "42caed544dff5adde161b0f3b2e7485eee51fb38c49b8c2ffb21ac90bfe24095"
       def install
         bin.install "uniforge"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/neptaco/UniForge/releases/download/v0.3.0/UniForge_linux_arm64.tar.gz"
-      sha256 "66483ceeb674a66516d07d5116a1d412b5e957f487aad8a2fabc681fecff075f"
+      url "https://github.com/neptaco/UniForge/releases/download/v0.4.0/UniForge_linux_arm64.tar.gz"
+      sha256 "a118db031e140e2ad8b4fd72cf6ee566a15cdbf6602381c8e3da698a998f6515"
       def install
         bin.install "uniforge"
       end
