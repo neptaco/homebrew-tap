@@ -5,23 +5,23 @@
 class Uniforge < Formula
   desc "CLI tool for Unity development"
   homepage "https://github.com/neptaco/uniforge"
-  version "0.7.0"
+  version "0.7.1"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/neptaco/UniForge/releases/download/v0.7.0/uniforge_darwin_amd64.tar.gz"
-      sha256 "62e7cfbf8c9b2c21ee9e635f0158660393e1ee6185a669e310a00dbe06f5b8ee"
+      url "https://github.com/neptaco/UniForge/releases/download/v0.7.1/uniforge_darwin_amd64.tar.gz"
+      sha256 "9fa9b52496b06d716e804e562b2dbe83eaf09e4b47c8bfbb68ad31df92be8b87"
 
-      def install
+      define_method(:install) do
         bin.install "uniforge"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/neptaco/UniForge/releases/download/v0.7.0/uniforge_darwin_arm64.tar.gz"
-      sha256 "aff53c4b2e837d42e855658037cf1986eb1fd3ed84a0fac875b7d72d99322199"
+      url "https://github.com/neptaco/UniForge/releases/download/v0.7.1/uniforge_darwin_arm64.tar.gz"
+      sha256 "4cafbe76d16d00cf66d68c935c929fff1aa17153854ee26df9c9782bdd097dff"
 
-      def install
+      define_method(:install) do
         bin.install "uniforge"
       end
     end
@@ -29,16 +29,16 @@ class Uniforge < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/neptaco/UniForge/releases/download/v0.7.0/uniforge_linux_amd64.tar.gz"
-      sha256 "9ffb6913c23170a455976b3cd3d0543a30962a4f342a422b11dd76d331bd0f0e"
-      def install
+      url "https://github.com/neptaco/UniForge/releases/download/v0.7.1/uniforge_linux_amd64.tar.gz"
+      sha256 "62b7b4f4642dda2279fe0e38b99e818188ba63c0955dd7ee3eb6dd3cc44e6d80"
+      define_method(:install) do
         bin.install "uniforge"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/neptaco/UniForge/releases/download/v0.7.0/uniforge_linux_arm64.tar.gz"
-      sha256 "6a7e338a3cee65eeacde936dca8aec9ad38c70de7c4b7aa0b995f74e6f46ccfb"
-      def install
+      url "https://github.com/neptaco/UniForge/releases/download/v0.7.1/uniforge_linux_arm64.tar.gz"
+      sha256 "c6a3ee2feb839311b5ed3244cfe38b10273f7a94ece95364ee8a09eeb9449105"
+      define_method(:install) do
         bin.install "uniforge"
       end
     end
